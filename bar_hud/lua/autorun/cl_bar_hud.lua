@@ -219,7 +219,9 @@ if CLIENT then
 		
 		-- Servername + Webname  -- 
 
-		draw.DrawText( bar_hud.ServerName, "BarTitle", w - (width + 129), 3, bar_hud.ServerNameTextColor, TEXT_ALIGN_LEFT, 1 )
+		local cin = (math.sin(CurTime() * 0.75) + 1) / 1
+
+		draw.DrawText( bar_hud.ServerName, "BarTitle", w - (width + 129), 3, Color(255, cin * 255, cin * 255, 156), TEXT_ALIGN_LEFT, 1 )
 		draw.DrawText( bar_hud.WebName, "BarTitle", w - (width + 100), 3, bar_hud.WebNameTextColor, TEXT_ALIGN_LEFT, 1 )
 	
 	end )
