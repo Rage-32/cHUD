@@ -12,8 +12,8 @@ local function showLaws()
 
     local size = table.Count(currentLaws)
 
-    if table.Count(currentLaws) >= 5 then
-        size = 5
+    if table.Count(currentLaws) >= 7 then
+        size = 7
     end
 	if IsValid(laws) and laws != false and laws != true then laws:Remove() end
     laws = vgui.Create("DFrame")
@@ -23,8 +23,8 @@ local function showLaws()
 
         size = table.Count(currentLaws)
 
-        if table.Count(currentLaws) >= 5 then
-            size = 5
+        if table.Count(currentLaws) >= 7 then
+            size = 7
         end
 
         if opening == false then
@@ -39,10 +39,15 @@ local function showLaws()
     laws.Paint = function(self, w, h)
         if gui.IsGameUIVisible() then return end
 
+        local wep = LocalPlayer():GetActiveWeapon()
+        if IsValid(wep) and wep:GetClass() == "gmod_camera" then
+            return
+        end
+
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 200))
 
         draw.RoundedBox(0, 0, 0, w, 2, c_red)
-        draw.SimpleText("Laws OF THE LAND", "Trebuchet18", 2, 9, Color(255, 255, 255), 0, 1)
+        draw.SimpleText("Laws", "Trebuchet18", 2, 9, Color(255, 255, 255), 0, 1)
         draw.RoundedBox(0, 0, 16, w, 2, c_red)
 
         for k, v in pairs(currentLaws) do
@@ -62,38 +67,13 @@ local function showLaws()
     end)
 end
 
--- local function hideLaws()
---     if input.IsKeyDown(KEY_F1) then
---         if opening or closing then return end
+local function rulesKey(ply)
+    if input.IsKeyDown(KEY_F6) then
+        RunConsoleCommand("ca", "motd")
+    end
+end
+hook.Add("Think", "rulesKey", rulesKey)
 
---         if !laws then
---             surface.PlaySound("UI/buttonclick.wav")
-
---             showLaws()
---         else
---             surface.PlaySound("UI/buttonclick.wav")
-
---             closing = true
-
---             laws:MoveTo(0 - laws:GetWide(), 32, 0.5, 0, -1, function()
---                 closing = false
-
---                 laws:Remove()
---                 laws = false
---             end)
---         end
---     end
--- end
--- hook.Add("Think", "hideLaws", hideLaws)
-
-
---[[/////////////////////////////////////
-Name: yc_laws_toggle
-Function: Network received to hide/show the laws hud
-Input: network parameters
-Output: /
-Data: /
---/////////////////////////////////////]]
 net.Receive("yc_laws_toggle", function(len, ply)
 	showLaws()
 end)
